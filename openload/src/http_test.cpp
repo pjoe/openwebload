@@ -296,9 +296,12 @@ int main(int argc, char* argv[])
         pReqParams[i].clientId = i;
         pReqParams[i].sequenceNumber = 1;
         reqs[i].m_Url = url;
-        sprintf(path, "%smagic=%d-%d", g_originalPath,
-            pReqParams[i].clientId, pReqParams[i].sequenceNumber);
-        reqs[i].m_Url.setPath(path);
+        if(g_fVerify)
+        {
+            sprintf(path, "%smagic=%d-%d", g_originalPath,
+                pReqParams[i].clientId, pReqParams[i].sequenceNumber);
+            reqs[i].m_Url.setPath(path);
+        }
         reqs[i].m_pHeaders = &Headers;
 
         SendRequest(&reqs[i], &evLoop, ResponseFunc, &pReqParams[i]);
@@ -319,6 +322,8 @@ int main(int argc, char* argv[])
             printf("Total TPS: %6.2f\n", tps);
             printf("Avg. Response time: %6.3f sec.\n", respTime);
             printf("Max Response time:  %6.3f sec\n", g_maxDuration / 1000.0f);
+            printf("Total Requests: %7ld\n", g_totalCount);
+            printf("Total Errors:   %7ld\n", g_errorCount);
         }
         if(oMode == OM_CSV)
         {
