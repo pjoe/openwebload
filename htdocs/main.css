@@ -79,6 +79,13 @@ H1
     FONT-SIZE: 18px
 }
 
+H2
+{
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 16px
+}
+
 A.heading
 {
     FONT-SIZE: 12px;

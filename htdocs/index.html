@@ -8,9 +8,10 @@
  <hr />
  <p>
  <a href="#what">What is OpenLoad?</a><br />
+ <a href="#download">Download</a><br />
+ <a href="#news">News</a><br />
+ <a href="#install">Installation</a><br />
  <a href="#how">How do I use it?</a><br />
- <a href="http://sourceforge.net/project/showfiles.php?group_id=21343">
-  Download</a><br />
  <a href="http://sourceforge.net/projects/openload/">
   SourceForge poject page</a><br />
  <a href="developer/index.html">Developer Information</a><br />
@@ -25,6 +26,56 @@
   optimization as you can see the impact of your changes almost immediately.
  </p>
 
+ <a name="news"></a>
+ <h1>News</h1>
+ <p><b>27-jun-2001: Ver. 0.1.2 Released</b></p>
+ <p>
+  This release adds a number of new command line options for specifying
+  request headers, setting a time limit, doing test runs which displays
+  the HTTP response, and more.
+ </p>
+
+ <a name="download"></a>
+ <h1>Download</h1>
+ <p>
+  You can download the latest release of OpenLoad from SourceForge
+  <a href="http://sourceforge.net/project/showfiles.php?group_id=21343">
+   <b>HERE</b></a>.  
+ </p> 
+
+ <a name="install"></a>
+ <h1>Installation</h1>
+ <h2>Linux</h2>
+ <p>
+  For i386 systems you can use the binary rpm file. Download the file and install
+  using:
+ </p>
+ <pre>
+  rpm -i &lt;filename&gt;</pre>
+ <p>
+  This installs openload in /usr/local/bin.
+ </p>
+ <p>
+  For other systems download the .tar.gz file, unpack it using:
+ </p>
+ <pre>
+  tar xvzf &lt;filename&gt;</pre>
+ <p>
+  and compile using the normal procedure:
+ </p>
+ <pre>
+  ./configure
+  make
+  make install</pre>
+ <p>
+  see the INSTALL file for details.
+ </p>
+ <h2>Win32</h2>
+ <p>
+  Download the executable (openload.exe) and save it in a directory which
+  is in your path. You can now start OpenLoad from any command (DOS) window.
+ </p>
+
  <a name="how"></a>
  <h1>How do I use it?</h1>
  <p>
@@ -32,15 +83,16 @@
   like this:
  </p>
  <pre>
-  openload http://testapp.site.com 10
- </pre>
+  openload [options] http://testapp.site.com 10</pre>
  <p>
   The 2 parameters are:
  </p>
  <ul>
   <li>The url of the web page you want to test.</li>
   <li>Number of simultanous clients to simulate. This is optional and
-   defaults to 5</li>
+   defaults to 5.</li>
+  <li>A number of options is also available. See <a href="cmd_parms.html">here</a>
+   for a detailed description of all the options.</li>
  </ul>
  <p>
   You will then get output similar to this:
@@ -58,8 +110,7 @@
  
   Total TPS: 452.90
   Avg. Response time:  0.021 sec.
-  Max Response time:   0.769 sec
- </pre>
+  Max Response time:   0.769 sec</pre>
  <p>
  Where:
  </p>
