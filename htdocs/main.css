@@ -67,8 +67,9 @@ P.footer
 
 PRE
 {
-    FONT-FAMILY: Courier-New;
-    FONT-SIZE: 12px;    MARGIN-LEFT: 10px
+    FONT-FAMILY: Courier-New, courier, monospace;
+    FONT-SIZE: 12px;
+    MARGIN-LEFT: 10px
 }
 
 H1
