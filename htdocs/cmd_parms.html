@@ -27,6 +27,19 @@
      openload -h User-Agent "MSIE 5.0" mysite.com/someapp
    </pre>
   </li>
+  <li><b>-l seconds</b> Time limit. The test will only run for the specified
+   number of seconds.</li>
+  <li><b>-o outputmode</b> Output mode. Currently only <b>csv</b> (comma seperated values)
+   is supported. This is useful for importing the result in a spreadsheet. The fields
+   are:
+   <pre>
+    Url
+    Number of clients
+    TPS
+    Average response time (seconds)
+    Maximum response time
+    Total number of requests
+   </pre>
 </li>
  </ul>
 </body>
