@@ -35,8 +35,17 @@ long getMsTime(void)
 //  TEST - test run which displays the response
 enum EReqModes
 {
-    NORMAL = 0,
-    TEST
+    RM_NORMAL = 0,
+    RM_TEST
+};
+
+// Output modes
+//  NORMAL - human readable
+//  CSV - prints a single line in csv format, ideal for importing in spreadsheets
+enum EOutputModes
+{
+    OM_NORMAL = 0,
+    OM_CSV
 };
 
 typedef struct TReqParams
@@ -45,6 +54,7 @@ typedef struct TReqParams
     EReqModes mode;
 } TReqParams;
 
+long g_timeLimit = 0;
 long g_startTime;
 long g_totalCount = 0;
 long g_lastReportTime;
@@ -61,7 +71,7 @@ void ResponseFunc(CHttpContext* pContext)
     TReqParams* pReqParams = (TReqParams*) pContext->m_pParam;
 
     // For TEST mode show body and stop
-    if(pReqParams->mode == TEST)
+    if(pReqParams->mode == RM_TEST)
     {
         // Show response
         printf("------------------------\n");
@@ -106,7 +116,7 @@ void ResponseFunc(CHttpContext* pContext)
         else
             g_maTps += (tps - g_maTps) * 0.1f;
     
-        printf("MaTps %6.2f, Tps %6.2f, Resp Time %6.3f, Err %3ld%%, "
+        fprintf(stderr, "MaTps %6.2f, Tps %6.2f, Resp Time %6.3f, Err %3ld%%, "
            "Count %5ld\n",
            g_maTps, tps, respTime, g_errorCount * 100 / g_count,
            g_totalCount);
@@ -115,6 +125,12 @@ void ResponseFunc(CHttpContext* pContext)
         g_count = 0;
         g_errorCount = 0;
         g_duration = 0;
+    }
+
+    // check if we have reached the time limit
+    if(g_timeLimit != 0 && endTime - g_startTime > g_timeLimit)
+    {
+        pContext->m_pEvLoop->stop();
     }
 
     // Send new request
@@ -129,7 +145,8 @@ int main(int argc, char* argv[])
     char* addr = NULL;
     int clients = 5;
     int i;
-    EReqModes mode = NORMAL;
+    EReqModes rMode = RM_NORMAL;
+    EOutputModes oMode = OM_NORMAL;
 
     // parse arguments
     char* arg;
@@ -141,13 +158,31 @@ int main(int argc, char* argv[])
             switch(arg[1])
             {
                 case 't':
+                    // test mode
                     clients = 1;
-                    mode = TEST;
+                    rMode = RM_TEST;
                     break;
                 case 'h':
+                    // add request header
                     i++;
-                    req.m_Headers.Add(argv[i], argv[i+1]);
+                    if(i+1 < argc)
+                        req.m_Headers.Add(argv[i], argv[i+1]);
                     i++;
+                    break;
+                case 'l':
+                    // time limit
+                    i++;
+                    if(i < argc)
+                        g_timeLimit = atoi(argv[i]);
+                    break;
+                case 'o':
+                    // output mode
+                    i++;
+                    if(i < argc)
+                    {
+                        if(stricmp("csv", argv[i]) == 0)
+                            oMode = OM_CSV;
+                    }
                     break;
                 default:
                     // unknown option
@@ -182,8 +217,14 @@ int main(int argc, char* argv[])
 
     CEventLoop evLoop;
 
-    printf("URL: http://%s:%d%s\n", url.host, url.port, url.path);
-    printf("Clients: %d\n", clients);
+    fprintf(stderr, "URL: http://%s:%d%s\n", url.host, url.port, url.path);
+    fprintf(stderr, "Clients: %d\n", clients);
+    if(g_timeLimit > 0)
+    {
+        fprintf(stderr, "Time Limit: %d sec.\n", g_timeLimit);
+    }
+    // convert time limit to ms
+    g_timeLimit *= 1000;
 
     g_startTime = getMsTime();
     g_lastReportTime = g_startTime;
@@ -192,13 +233,13 @@ int main(int argc, char* argv[])
     for(i = 0; i < clients; i++)
     {
         pReqParams[i].startTime = getMsTime();
-        pReqParams[i].mode = mode;
+        pReqParams[i].mode = rMode;
         SendRequest(&req, &evLoop, ResponseFunc, &pReqParams[i]);
     }
 
     evLoop.run();
 
-    if(mode == NORMAL)
+    if(rMode == RM_NORMAL)
     {
         long now = getMsTime();
 
@@ -206,9 +247,17 @@ int main(int argc, char* argv[])
         float respTime = 0;
         if(g_totalCount > 0)
             respTime = g_totalDuration / 1000.0f / g_totalCount;
-        printf("Total TPS: %6.2f\n", tps);
-        printf("Avg. Response time: %6.3f sec.\n", respTime);
-        printf("Max Response time:  %6.3f sec\n", g_maxDuration / 1000.0f);
+        if(oMode == OM_NORMAL)
+        {
+            printf("Total TPS: %6.2f\n", tps);
+            printf("Avg. Response time: %6.3f sec.\n", respTime);
+            printf("Max Response time:  %6.3f sec\n", g_maxDuration / 1000.0f);
+        }
+        if(oMode == OM_CSV)
+        {
+            printf("http://%s:%d%s,%d,%.2f,%.3f,%.3f,%d\n", url.host, url.port, url.path,
+                clients, tps, respTime, g_maxDuration / 1000.0f, g_totalCount);
+        }
     }
 
 
