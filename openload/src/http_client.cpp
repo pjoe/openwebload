@@ -364,34 +364,41 @@ void GotChunkLen(CTcpSock* pSock)
     // get ready for reading chunk
     pSock->m_cbRecvBufOk = GotChunk;
 
-    // get the chunk len
-    unsigned long chunkLen;
-    chunkLen = strtoul(pSock->m_rbuf, 0, 16);
+	// got an empty line -> try again
+	if(pSock->m_read == 0)
+	{
+		pSock->readLine(pSock->m_rbuf, MAX_LINE_SIZE);
+	}
+	else
+	{
+		// get the chunk len
+		unsigned long chunkLen;
+		chunkLen = strtoul(pSock->m_rbuf, 0, 16);
 
-    // delete the line buf
-    delete [] pSock->m_rbuf;
+		// delete the line buf
+		delete [] pSock->m_rbuf;
 
-    // check if we are done
-    if(chunkLen == 0)
-    {
-        Done(pSock);
-        return;
-    }
+		// check if we are done
+		if(chunkLen == 0)
+		{
+			Done(pSock);
+			return;
+		}
 
-    // allocate space including his chunk
-    char* p = new char[pContext->m_pResp->m_Len + chunkLen];
+		// allocate space including his chunk
+		char* p = new char[pContext->m_pResp->m_Len + chunkLen];
 
-    // copy old data if necessary
-    if(pContext->m_pResp->m_Len > 0)
-    {
-        memcpy(p, pContext->m_pResp->m_Body, pContext->m_pResp->m_Len);
-        delete [] pContext->m_pResp->m_Body;
-    }
-    pContext->m_pResp->m_Body = p;
+		// copy old data if necessary
+		if(pContext->m_pResp->m_Len > 0)
+		{
+			memcpy(p, pContext->m_pResp->m_Body, pContext->m_pResp->m_Len);
+			delete [] pContext->m_pResp->m_Body;
+		}
+		pContext->m_pResp->m_Body = p;
 
-    // read the chunk
-    pSock->recvBuf(&p[pContext->m_pResp->m_Len], chunkLen);
-        
+		// read the chunk
+		pSock->recvBuf(&p[pContext->m_pResp->m_Len], chunkLen);
+	}
 }
 
 void GotChunk(CTcpSock* pSock)
