@@ -38,6 +38,7 @@ int strnicmp(const char* s1, const char* s2, int n)
 #endif // WIN32
 
 #define MAX_LINE_SIZE 2000
+#define BUFFER_SIZE 2000
 
 // ---------------- CHttpRequest ----------------
 
@@ -75,6 +76,7 @@ void ReadStatus(CTcpSock* pSock);
 void ParseStatus(CTcpSock* pSock);
 void ReadHeader(CTcpSock* pSock);
 void NonChunkedCtLenDone(CTcpSock* pSock);
+void NonChunkedNoCtLenDone(CTcpSock* pSock);
 void GotChunkLen(CTcpSock* pSock);
 void GotChunk(CTcpSock* pSock);
 void Done(CTcpSock* pSock);
@@ -285,7 +287,11 @@ void ReadHeader(CTcpSock* pSock)
             }
             else
             {
-                // TODO: handle when content-length header is not set
+                // handle when content-length header is not set
+                pContext->m_pResp->m_Body = new char[BUFFER_SIZE];
+		pContext->m_pResp->m_Len = 0;
+                pSock->m_cbRecvBufOk = NonChunkedNoCtLenDone;
+                pSock->recvBuf(pContext->m_pResp->m_Body, BUFFER_SIZE);
             }
         }
 
@@ -308,6 +314,32 @@ void NonChunkedCtLenDone(CTcpSock* pSock)
     pContext->m_pResp->m_Len = pSock->m_read;
 
     Done(pSock);
+}
+
+void NonChunkedNoCtLenDone(CTcpSock* pSock)
+{
+    CHttpContext* pContext = (CHttpContext*) pSock->m_context;
+
+    // updated len read
+    pContext->m_pResp->m_Len += pSock->m_read;
+
+    // check if we are done
+    if(pSock->m_read < BUFFER_SIZE)
+    {
+	Done(pSock);
+    }
+    else
+    {
+	// extend buffer
+	char* pData;
+	pData = new char[pContext->m_pResp->m_Len + BUFFER_SIZE];
+	memcpy(pData, pContext->m_pResp->m_Body, pContext->m_pResp->m_Len);
+	delete [] pContext->m_pResp->m_Body;
+	pContext->m_pResp->m_Body = pData;
+
+	pSock->m_cbRecvBufOk = NonChunkedNoCtLenDone;
+	pSock->recvBuf(&pData[pContext->m_pResp->m_Len], BUFFER_SIZE);
+    }
 }
 
 void GotChunkLen(CTcpSock* pSock)
@@ -387,192 +419,3 @@ void Done(CTcpSock* pSock)
     delete pContext;
 }
 
-#if 0
-// -----------------------------------------------
-int SendRequest(CHttpRequest* pReq, CHttpResponse* pResp, TIdleFunc* pIdleFunc, void* pParam)
-{
-    int res;
-
-    OSASocket sock;
-
-    res = sock.create(SOCK_STREAM);
-    if(res)
-        return res;
-
-    sock.async_set(TRUE);
-    sock.async_set_idle_func(pIdleFunc, pParam);
-
-    res = sock.connect(&pReq->m_Url.addr);
-    if(res)
-        return res;
-
-    // write command
-    char* meth;
-    if(pReq->m_Method == METHOD_GET)
-        meth = "GET ";
-    if(pReq->m_Method == METHOD_POST)
-        meth = "POST ";
-    if(pReq->m_Method == METHOD_HEAD)
-        meth = "HEAD ";
-
-    res = sock.write_string(meth);
-    if( res < 0)
-        return res;
-    res = sock.write_string(pReq->m_Url.path);
-    if( res < 0)
-        return res;
-    res = sock.write_string(" HTTP/1.1" CRLF);
-    if( res < 0)
-        return res;
-
-    // header handling
-    pReq->m_Headers.Add("Connection", "Close");
-    if(pReq->m_Headers.Find("Host") == NULL)
-        pReq->m_Headers.Add("Host", pReq->m_Url.host);
-
-    // write headers
-    CHttpHeader* pHdr = pReq->m_Headers.pFirst;
-    while(pHdr)
-    {
-        res = sock.write_string(pHdr->name);
-        if( res < 0)
-            return res;
-        res = sock.write_string(": ");
-        if( res < 0)
-            return res;
-        res = sock.write_string(pHdr->value);
-        if( res < 0)
-            return res;
-        res = sock.write_string(CRLF);
-        if( res < 0)
-            return res;
-        pHdr = pHdr->pNext;
-    }
-    
-    res = sock.write_string(CRLF);
-    if( res < 0)
-        return res;
-
-    // write body
-    if(pReq->m_Method == METHOD_POST)
-    {
-        res = sock.send(pReq->m_Body, pReq->m_Len);
-        if( res < 0)
-            return res;
-    }
-
-    char buf[2000];
-    char *p;
-    //get status
-    res = sock.read_line(buf, sizeof(buf));
-    if( res < 0)
-        return res;
-
-    p = strstr(buf, "HTTP/1.1");
-    if(p)
-    {
-        p += 8;
-        while(isspace(*p) && *p)
-            p++;
-        pResp->m_Status = atoi(p);
-    }
-    else
-    {
-		p = buf;
-        while(!isspace(*p) && *p)
-            p++;
-        while(isspace(*p) && *p)
-            p++;
-        pResp->m_Status = atoi(p);
-    }
-
-    // get headers
-    while(1)
-    {
-        res = sock.read_line(buf, sizeof(buf));
-        if(res < 0)
-            return res;
-        if(res == 0)
-            break;
-        pResp->m_Headers.Add(buf);
-    }
-
-    bool isChunked = false;
-
-    const char* transfer_encoding = pResp->m_Headers.FindValue("Transfer-Encoding");
-
-    if(transfer_encoding && stricmp(transfer_encoding, "chunked") == 0)
-        isChunked = true;
-
-    // get body
-    if(isChunked)
-    {
-        int total = 0;
-
-        while(1)
-        {
-            res = sock.read_line(buf, sizeof(buf));
-            if(res < 0)
-                return res;
-            if(res == 0)
-                break;
-
-            unsigned long chunkLen;
-            chunkLen = strtoul(buf, 0, 16);
-
-            p = new char[total + chunkLen];
-            if(total > 0)
-            {
-                memcpy(p, pResp->m_Body, total);
-            }
-            res = sock.read_buf(p + total, chunkLen);
-            if(res < 0)
-                return res;
-            total += res;
-            delete [] pResp->m_Body;
-            pResp->m_Body = p;
-            pResp->m_Len = total;
-        }
-    }
-    else // not chunked
-    {
-        // get content length
-        const char* content_length = pResp->m_Headers.FindValue("Content-Length");
-        if(content_length)
-        {
-            int len = atoi(content_length);
-            pResp->m_Body = new char[len];
-            res = sock.read_buf(pResp->m_Body, len);
-            if(res < 0)
-                return res;
-            pResp->m_Len = res;
-        }
-        else
-        {
-            pResp->m_Body = new char[2000];
-            int res;
-            int total = 0;
-            while(true)
-            {
-                p = pResp->m_Body + total;
-                res = sock.read_buf(p, 2000);
-                if(res < 0)
-                    return res;
-                total += res;
-                if(res < 2000)
-                    break;
-                p = new char[total + 2000];
-                memcpy(p, pResp->m_Body, total);
-                delete [] pResp->m_Body;
-                pResp->m_Body = p;
-            }
-            pResp->m_Len = total;
-        }
-    }
-
-    sock.close();
-
-    return 0;
-}
-
-#endif // 0
