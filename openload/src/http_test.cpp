@@ -53,7 +53,7 @@ void ResponseFunc(CHttpContext* pContext)
     long duration = endTime - pReqParams->startTime;
 
     // Check if we got a HTTP 200 OK response 
-    if(pContext->m_pResp->status != 200)
+    if(pContext->m_pResp->m_Status != 200)
     {
 	g_errorCount++;
     }
@@ -78,11 +78,14 @@ void ResponseFunc(CHttpContext* pContext)
         else
             g_maTps += (tps - g_maTps) * 0.1f;
     
-        printf("MATPS %6.2f, TPS %6.2f, RESP TIME %6.3f, count %5ld\n",
-	       g_maTps, tps, respTime, g_totalCount);
+        printf("MaTps %6.2f, Tps %6.2f, Resp Time %6.3f, Err %3ld%%, "
+	       "Count %5ld\n",
+	       g_maTps, tps, respTime, g_errorCount * 100 / g_count,
+	       g_totalCount);
 
         g_lastReportTime = endTime;
         g_count = 0;
+	g_errorCount = 0;
 	g_duration = 0;
     }
 
