@@ -25,7 +25,7 @@ public:
 
     EHttpMethod m_Method;
     CUrl m_Url;
-    CHttpHeaderList m_Headers;
+    CHttpHeaderList* m_pHeaders;
     char* m_Body;
     int m_Len;
 };

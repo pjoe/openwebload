@@ -1,6 +1,8 @@
 #include "http_client.h"
+#include "verifier.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef WIN32
 
@@ -52,6 +54,8 @@ typedef struct TReqParams
 {
     long startTime;
     EReqModes mode;
+    int clientId;
+    int sequenceNumber;
 } TReqParams;
 
 long g_timeLimit = 0;
@@ -64,6 +68,10 @@ long g_duration = 0;
 long g_totalDuration = 0;
 long g_maxDuration = 0;
 float g_maTps = 0.0f;
+
+int g_fVerify = 0;
+CVerifier g_verifier;
+char g_originalPath[1025];
 
 void ResponseFunc(CHttpContext* pContext)
 {
@@ -92,6 +100,20 @@ void ResponseFunc(CHttpContext* pContext)
     if(pContext->m_pResp->m_Status != 200)
     {
         g_errorCount++;
+    }
+    else
+    {
+        // verify if needed
+        if(g_fVerify)
+        {
+            char magic[30];
+            sprintf(magic, "%d-%d", pReqParams->clientId, pReqParams->sequenceNumber);
+            if(!g_verifier.Verify(pContext->m_pResp->m_Body, magic))
+                g_errorCount++;
+
+            // increment sequence number
+            pReqParams->sequenceNumber++;
+        }
     }
 
     // Update counters
@@ -133,6 +155,16 @@ void ResponseFunc(CHttpContext* pContext)
         pContext->m_pEvLoop->stop();
     }
 
+    // if verifying is enabled, update the url
+    if(g_fVerify)
+    {
+        char path[1050];
+        sprintf(path, "%smagic=%d-%d", g_originalPath,
+            pReqParams->clientId, pReqParams->sequenceNumber);
+        pContext->m_pReq->m_Url.setPath(path);
+    }
+
+
     // Send new request
     pReqParams->startTime = getMsTime();
     SendRequest(pContext->m_pReq, pContext->m_pEvLoop, ResponseFunc, pReqParams);
@@ -140,7 +172,8 @@ void ResponseFunc(CHttpContext* pContext)
 
 int main(int argc, char* argv[])
 {
-    CHttpRequest req;
+    CHttpHeaderList Headers;
+    CHttpRequest* reqs;
     CUrl url;
     char* addr = NULL;
     int clients = 5;
@@ -166,7 +199,7 @@ int main(int argc, char* argv[])
                     // add request header
                     i++;
                     if(i+1 < argc)
-                        req.m_Headers.Add(argv[i], argv[i+1]);
+                        Headers.Add(argv[i], argv[i+1]);
                     i++;
                     break;
                 case 'l':
@@ -182,6 +215,21 @@ int main(int argc, char* argv[])
                     {
                         if(stricmp("csv", argv[i]) == 0)
                             oMode = OM_CSV;
+                    }
+                    break;
+                case 'v':
+                    // verifier
+                    i++;
+                    if(i < argc)
+                    {
+                        if(g_verifier.LoadTemplate(argv[i], "MAGIC") != 0)
+                        {
+                            printf("unable to load verifier template\n");
+                        }
+                        else
+                        {
+                            g_fVerify = 1;
+                        }
                     }
                     break;
                 default:
@@ -218,12 +266,16 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    req.m_Url = url;
+    strncpy(g_originalPath, url.path, 1024);
 
     CEventLoop evLoop;
 
     fprintf(stderr, "URL: http://%s:%d%s\n", url.host, url.port, url.path);
     fprintf(stderr, "Clients: %d\n", clients);
+    if(g_fVerify)
+    {
+        fprintf(stderr, "Verifying enabled\n");
+    }
     if(g_timeLimit > 0)
     {
         fprintf(stderr, "Time Limit: %d sec.\n", g_timeLimit);
@@ -235,11 +287,21 @@ int main(int argc, char* argv[])
     g_lastReportTime = g_startTime;
 
     TReqParams* pReqParams = new TReqParams[clients];
+    reqs = new CHttpRequest[clients];
+    char path[1050];
     for(i = 0; i < clients; i++)
     {
         pReqParams[i].startTime = getMsTime();
         pReqParams[i].mode = rMode;
-        SendRequest(&req, &evLoop, ResponseFunc, &pReqParams[i]);
+        pReqParams[i].clientId = i;
+        pReqParams[i].sequenceNumber = 1;
+        reqs[i].m_Url = url;
+        sprintf(path, "%smagic=%d-%d", g_originalPath,
+            pReqParams[i].clientId, pReqParams[i].sequenceNumber);
+        reqs[i].m_Url.setPath(path);
+        reqs[i].m_pHeaders = &Headers;
+
+        SendRequest(&reqs[i], &evLoop, ResponseFunc, &pReqParams[i]);
     }
 
     evLoop.run();
@@ -266,6 +328,7 @@ int main(int argc, char* argv[])
     }
 
 
+    delete [] reqs;
     delete [] pReqParams;
 
     return 0;

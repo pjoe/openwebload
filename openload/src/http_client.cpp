@@ -138,13 +138,13 @@ void SendCommand(CTcpSock* pSock)
     strcat(command, " HTTP/1.1" CRLF);
 
     // set connection header to close
-    pContext->m_pReq->m_Headers.Add("Connection", "Close");
+    pContext->m_pReq->m_pHeaders->Add("Connection", "Close");
     // make sure we have a host header
-    if(pContext->m_pReq->m_Headers.Find("Host") == NULL)
-        pContext->m_pReq->m_Headers.Add("Host", pContext->m_pReq->m_Url.host);
+    if(pContext->m_pReq->m_pHeaders->Find("Host") == NULL)
+        pContext->m_pReq->m_pHeaders->Add("Host", pContext->m_pReq->m_Url.host);
     
     // get ready to send the first header
-    pContext->m_pHeader = pContext->m_pReq->m_Headers.pFirst;
+    pContext->m_pHeader = pContext->m_pReq->m_pHeaders->pFirst;
     pSock->m_cbSendOk = SendHeader;
 
     // send the command
