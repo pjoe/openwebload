@@ -1,0 +1,33 @@
+<html>
+<head>
+ <title>OpenLoad</title>
+ <link href="main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+ <a href="index.html"><img src="images/openload.gif" border="0" /></a>
+ <hr />
+ <h1>OpenLoad Commandline Parameters</h1>
+ <p>
+  The syntax for OpenLoad is:
+ </p>
+ <pre>
+  openload [options] url [clients]
+ </pre>
+ <p>
+  The options are:
+ </p>
+ <ul>
+  <li><b>-t</b> Test mode. In this mode no throughput measurements are done.
+   However the full response from the webserver (including headers) is displayed.
+   This is useful for verifying that you get the right content before executing
+   the real test. In this mode the number of clients defaults to 1.</li>
+  <li><b>-h header value</b> Specifies a HTTP request header. You can use this option several
+   times to specify several headers. E.g. to specify the User-Agent header you can do:<br />
+   <pre>
+     openload -h User-Agent "MSIE 5.0" mysite.com/someapp
+   </pre>
+  </li>
+</li>
+ </ul>
+</body>
+</html>
