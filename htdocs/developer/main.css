@@ -1,0 +1,103 @@
+BODY
+{
+    BACKGROUND-COLOR: #ffffff;
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    MARGIN-TOP: 10px;
+    MARGIN-LEFT: 10px
+}
+
+A:link
+{
+    COLOR: #3366cc
+}
+
+A:active
+{
+    COLOR: #999999
+}
+
+A:visited
+{
+    COLOR: #336666
+}
+
+A.bcrumb:visited
+{
+    COLOR: #000000
+}
+
+A.bcrumb:link
+{
+    COLOR: #000000
+}
+
+A:hover
+{
+    COLOR: #ff0000
+}
+
+A.bcrumb:hover
+{
+    COLOR: #ff0000
+}
+
+TD
+{
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    FONT-SIZE: 12px
+}
+
+P
+{
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    FONT-SIZE: 12px
+}
+
+LI
+{
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    FONT-SIZE: 12px
+}
+
+P.footer
+{
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    FONT-SIZE: 10px
+}
+
+PRE
+{
+    FONT-FAMILY: Courier-New, courier, monospace;
+    FONT-SIZE: 12px;
+    MARGIN-LEFT: 10px
+}
+
+H1
+{
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 18px
+}
+
+H2
+{
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 16px
+}
+
+H3
+{
+    FONT-FAMILY: Verdana,Arial,sans-serif;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 12px
+}
+
+A.heading
+{
+    FONT-SIZE: 12px;
+    FONT-WEIGHT: bold
+}
+
+
+
