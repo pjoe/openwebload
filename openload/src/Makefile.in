@@ -65,7 +65,7 @@ VERSION = @VERSION@
 
 bin_PROGRAMS = openload
 
-openload_SOURCES = sock.cpp event_loop.cpp http_client.cpp http_test.cpp 	url.cpp http_headers.cpp
+openload_SOURCES = sock.cpp event_loop.cpp http_client.cpp http_test.cpp 	url.cpp http_headers.cpp tmplchunk.cpp tmplparmchunk.cpp tmpltxtchunk.cpp 	verifier.cpp
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
@@ -77,7 +77,7 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 openload_OBJECTS =  sock.o event_loop.o http_client.o http_test.o url.o \
-http_headers.o
+http_headers.o tmplchunk.o tmplparmchunk.o tmpltxtchunk.o verifier.o
 openload_LDADD = $(LDADD)
 openload_DEPENDENCIES = 
 openload_LDFLAGS = 
@@ -93,7 +93,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/event_loop.P .deps/http_client.P .deps/http_headers.P \
-.deps/http_test.P .deps/sock.P .deps/url.P
+.deps/http_test.P .deps/sock.P .deps/tmplchunk.P .deps/tmplparmchunk.P \
+.deps/tmpltxtchunk.P .deps/url.P .deps/verifier.P
 SOURCES = $(openload_SOURCES)
 OBJECTS = $(openload_OBJECTS)
 
