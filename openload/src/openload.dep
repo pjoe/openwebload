@@ -10,17 +10,31 @@
 	"..\..\..\programmer\microsoft visual studio\vc98\include\basetsd.h"\
 	".\event_loop.h"\
 	".\http_client.h"\
+	".\http_headers.h"\
 	".\sock.h"\
+	".\url.h"\
+	
+
+.\http_headers.cpp : \
+	".\http_headers.h"\
 	
 
 .\http_test.cpp : \
 	"..\..\..\programmer\microsoft visual studio\vc98\include\basetsd.h"\
 	".\event_loop.h"\
 	".\http_client.h"\
+	".\http_headers.h"\
 	".\sock.h"\
+	".\url.h"\
 	
 
 .\sock.cpp : \
 	"..\..\..\programmer\microsoft visual studio\vc98\include\basetsd.h"\
 	".\sock.h"\
+	
+
+.\url.cpp : \
+	"..\..\..\programmer\microsoft visual studio\vc98\include\basetsd.h"\
+	".\sock.h"\
+	".\url.h"\
 	

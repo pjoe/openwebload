@@ -93,11 +93,19 @@ SOURCE=.\http_client.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\http_headers.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\http_test.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\sock.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\url.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -113,7 +121,15 @@ SOURCE=.\http_client.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\http_headers.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\sock.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\url.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -42,8 +42,10 @@ ALL : "$(OUTDIR)\openload.exe"
 CLEAN :
 	-@erase "$(INTDIR)\event_loop.obj"
 	-@erase "$(INTDIR)\http_client.obj"
+	-@erase "$(INTDIR)\http_headers.obj"
 	-@erase "$(INTDIR)\http_test.obj"
 	-@erase "$(INTDIR)\sock.obj"
+	-@erase "$(INTDIR)\url.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(OUTDIR)\openload.exe"
 
@@ -61,7 +63,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\http_client.obj" \
 	"$(INTDIR)\http_test.obj" \
 	"$(INTDIR)\sock.obj" \
-	"$(INTDIR)\event_loop.obj"
+	"$(INTDIR)\event_loop.obj" \
+	"$(INTDIR)\url.obj" \
+	"$(INTDIR)\http_headers.obj"
 
 "$(OUTDIR)\openload.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -82,8 +86,10 @@ ALL : "$(OUTDIR)\openload.exe"
 CLEAN :
 	-@erase "$(INTDIR)\event_loop.obj"
 	-@erase "$(INTDIR)\http_client.obj"
+	-@erase "$(INTDIR)\http_headers.obj"
 	-@erase "$(INTDIR)\http_test.obj"
 	-@erase "$(INTDIR)\sock.obj"
+	-@erase "$(INTDIR)\url.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\vc60.pdb"
 	-@erase "$(OUTDIR)\openload.exe"
@@ -104,7 +110,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\http_client.obj" \
 	"$(INTDIR)\http_test.obj" \
 	"$(INTDIR)\sock.obj" \
-	"$(INTDIR)\event_loop.obj"
+	"$(INTDIR)\event_loop.obj" \
+	"$(INTDIR)\url.obj" \
+	"$(INTDIR)\http_headers.obj"
 
 "$(OUTDIR)\openload.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -164,6 +172,11 @@ SOURCE=.\http_client.cpp
 "$(INTDIR)\http_client.obj" : $(SOURCE) "$(INTDIR)"
 
 
+SOURCE=.\http_headers.cpp
+
+"$(INTDIR)\http_headers.obj" : $(SOURCE) "$(INTDIR)"
+
+
 SOURCE=.\http_test.cpp
 
 "$(INTDIR)\http_test.obj" : $(SOURCE) "$(INTDIR)"
@@ -172,6 +185,11 @@ SOURCE=.\http_test.cpp
 SOURCE=.\sock.cpp
 
 "$(INTDIR)\sock.obj" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\url.cpp
+
+"$(INTDIR)\url.obj" : $(SOURCE) "$(INTDIR)"
 
 
 

@@ -3,6 +3,8 @@
 
 #include "sock.h"
 #include "event_loop.h"
+#include "url.h"
+#include "http_headers.h"
 
 #define CRLF "\x00d\x00a"
 
@@ -14,52 +16,6 @@ typedef enum
     METHOD_PUT = 3,
     METHOD_DELETE = 4
 } eHttpMethod;
-
-class CHttpHeader
-{
-public:
-    char* name;
-    char* value;
-
-    CHttpHeader();
-    void Set(const char* n, const char* v);
-    virtual ~CHttpHeader();
-
-    CHttpHeader* pNext;
-    CHttpHeader* pPrev;
-};
-
-class CHttpHeaderList
-{
-public:
-    CHttpHeader* pFirst;
-    CHttpHeader* pLast;
-
-    CHttpHeaderList();
-    virtual ~CHttpHeaderList();
-
-    void Insert(CHttpHeader* pNew);
-    void Add(const char* name, const char* value);
-    void Add(const char* line);
-    CHttpHeader* Find(const char* name);
-    const char* FindValue(const char* name);
-    void Delete(const char* name);
-
-    void Dump();
-};
-
-class CUrl
-{
-public:
-    char* host;
-    char* path;
-    SOCKADDR_IN addr;
-
-    CUrl();
-    virtual ~CUrl();
-    int parse(const char* url);
-    CUrl& operator=(const CUrl& r);
-};
 
 class CHttpRequest
 {
