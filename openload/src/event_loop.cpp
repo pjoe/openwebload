@@ -40,7 +40,7 @@ int checkStdIn(void)
     return 0;
 }
 
-#endif WIN32
+#endif // WIN32
 
 class CSockList
 {
