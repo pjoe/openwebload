@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 	clients = atoi(argv[2]);
     int i;
 
-    printf("URL: http://%s%s\n", url.host, url.path);
+    printf("URL: http://%s:%d%s\n", url.host, url.port, url.path);
     printf("Clients: %d\n", clients);
 
     g_startTime = getMsTime();

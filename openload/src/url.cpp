@@ -1,5 +1,6 @@
 #include "url.h"
 #include <string.h>
+#include <stdlib.h>
 
 #ifndef WIN32
 
@@ -28,26 +29,43 @@ int CUrl::parse(const char* url)
 {
     const char* p = url;
     const char* p2;
+    const char* p3;
+    const char* p4;
     delete [] host;
     delete [] path;
     if(strnicmp(url, "http://", 7) == 0)
         p += 7;
 
-    p2 = strchr(p, '/');
-    if(p2)
-    {
-        host = new char[p2 - p + 1];
-        strncpy(host, p, p2 - p);
-        host[p2-p] = 0;
 
-        path = new char[strlen(p2) + 1];
-        strcpy(path, p2);
+    p3 = strchr(p, ':');
+    p2 = strchr(p, '/');
+    p4 = p2;
+
+    if(p3)
+    {
+	p4 = p3;
+	port = atoi(++p3);
+    }
+
+    if(p4)
+    {
+        host = new char[p4 - p + 1];
+        strncpy(host, p, p4 - p);
+        host[p4-p] = 0;
     }
     else
     {
         host = new char[strlen(p) + 1];
         strcpy(host, p);
+    }
 
+    if(p2)
+    {
+        path = new char[strlen(p2) + 1];
+        strcpy(path, p2);
+    }
+    else
+    {
         path = new char[2];
         strcpy(path, "/");
     }
