@@ -11,10 +11,7 @@ int checkStdIn(void)
         {
             char c;
             c = getch();
-            if(tolower(c) == 'q')
-		{
 		    return 1;
-		}
         }
     return 0;
 }
@@ -79,7 +76,7 @@ int CEventLoop::run(void)
 
     struct timeval tv;
 
-    int i;
+    unsigned int i;
 
     CSockList* pSock;
     CSockList* pNext;

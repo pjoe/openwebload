@@ -14,6 +14,7 @@ void tracef(const char* str, ...)
 
 #pragma comment( lib, "wsock32" )
 
+typedef int socklen_t;
 
 class dummy
 {
@@ -159,7 +160,6 @@ CTcpSock::~CTcpSock(void)
 int CTcpSock::create(void)
 {
     tracef("creating socket ... ");
-    int res;
     m_sock = ::socket(AF_INET, SOCK_STREAM, 0);
     if(m_sock != INVALID_SOCKET)
     {
@@ -413,7 +413,7 @@ int CTcpSock::processEvent(int event)
         {
 	    int res;
 	    int len = sizeof(res);
-	    getsockopt(m_sock, SOL_SOCKET, SO_ERROR, &res, (socklen_t*) &len);
+	    getsockopt(m_sock, SOL_SOCKET, SO_ERROR, (char *) &res, (socklen_t*) &len);
 	    if(res == 0)
 	    {
 		tracef("connect OK\n");
