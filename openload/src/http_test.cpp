@@ -193,15 +193,18 @@ int main(int argc, char* argv[])
 
     evLoop.run();
 
-    long now = getMsTime();
+    if(mode == NORMAL)
+    {
+        long now = getMsTime();
 
-    float tps = g_totalCount /((now - g_startTime) / 1000.0f);
-    float respTime = 0;
-    if(g_totalCount > 0)
-	respTime = g_totalDuration / 1000.0f / g_totalCount;
-    printf("Total TPS: %6.2f\n", tps);
-    printf("Avg. Response time: %6.3f sec.\n", respTime);
-    printf("Max Response time:  %6.3f sec\n", g_maxDuration / 1000.0f);
+        float tps = g_totalCount /((now - g_startTime) / 1000.0f);
+        float respTime = 0;
+        if(g_totalCount > 0)
+            respTime = g_totalDuration / 1000.0f / g_totalCount;
+        printf("Total TPS: %6.2f\n", tps);
+        printf("Avg. Response time: %6.3f sec.\n", respTime);
+        printf("Max Response time:  %6.3f sec\n", g_maxDuration / 1000.0f);
+    }
 
 
     delete [] pReqParams;
