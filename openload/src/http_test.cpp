@@ -212,7 +212,12 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    url.parse(addr);
+    if(url.parse(addr))
+    {
+        printf("Error: DNS unable to find remote host\n");
+        return 1;
+    }
+
     req.m_Url = url;
 
     CEventLoop evLoop;
