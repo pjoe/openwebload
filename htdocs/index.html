@@ -4,100 +4,150 @@
  <link href="main.css" type="text/css" rel="stylesheet">
 </head>
 <body>
- <a href="index.html"><img src="images/openload.gif" border="0" /></a>
- <hr />
- <p>
- <a href="#what">What is OpenLoad?</a><br />
- <a href="#download">Download</a><br />
- <a href="#news">News</a><br />
- <a href="#install">Installation</a><br />
- <a href="#how">How do I use it?</a><br />
- <a href="http://sourceforge.net/projects/openload/">
-  SourceForge poject page</a><br />
- <a href="developer/index.html">Developer Information</a><br />
- </p>
+ <a href="index.html"><img src="images/openload.gif" border="0"></a>
+ <hr>
+ <table border="0" width="70%" align="center">
+  <tr>
+   <td>
+    <p>
+     <a href="#what">What is OpenLoad?</a><br>
+     <a href="#download">Download</a><br>
+     <a href="#news">News</a><br>
+     <a href="#install">Installation</a><br>
+     <a href="#how">How do I use it?</a><br>
+     <a href="http://sourceforge.net/projects/openload/">
+      SourceForge poject page</a><br>
+     <a href="developer/index.html">Developer Information</a><br>
+    </p>
+   </td>
+  </tr>
+ </table>
 
+ <br>
  <a name="what"></a>
- <h1>What is OpenLoad?</h1>
- <p>
-  OpenLoad is a tool for load testing web applications. It aims to be
-  easy to use and providing near real-time performance measurements of the
-  application under test. This is particulary useful when you are doing
-  optimization as you can see the impact of your changes almost immediately.
- </p>
+ <table border="1" width="70%" cellspacing="0" align="center">
+  <tr>
+   <td bgcolor="#c0c0c0"><h1>What is OpenLoad?</h1></td>
+  </tr>
+  <tr>
+   <td>
+    <p>
+     OpenLoad is a tool for load testing web applications. It aims to be
+     easy to use and providing near real-time performance measurements of the
+     application under test. This is particulary useful when you are doing
+     optimization as you can see the impact of your changes almost immediately.
+    </p>
+   </td>
+  </tr>
+ </table>
 
+ <br>
  <a name="news"></a>
- <h1>News</h1>
- <p><b>27-jun-2001: Ver. 0.1.2 Released</b></p>
- <p>
-  This release adds a number of new command line options for specifying
-  request headers, setting a time limit, doing test runs which displays
-  the HTTP response, and more.
- </p>
+ <table border="1" width="70%" cellspacing="0" align="center">
+  <tr>
+   <td bgcolor="#c0c0c0"><h1>News</h1></td>
+  </tr>
+  <tr>
+   <td>
+    <p><b>02-jul-2001: Release Plan Updated</b><br>
+     The release plan has been updated after the 0.1.2 release. It is available
+     in the developer area, or directly from <a href="developer/rel_plan.html"><b>HERE</b></a>.
+    </p>
+    <p><b>27-jun-2001: Ver. 0.1.2 Released</b><br>
+     This release adds a number of new command line options for specifying
+     request headers, setting a time limit, doing test runs which displays
+     the HTTP response, and more.
+    </p>
+   </td>
+  </tr>
+ </table>
 
+ <br>
  <a name="download"></a>
- <h1>Download</h1>
- <p>
-  You can download the latest release of OpenLoad from SourceForge
-  <a href="http://sourceforge.net/project/showfiles.php?group_id=21343">
-   <b>HERE</b></a>.  
- </p> 
+ <table border="1" width="70%" cellspacing="0" align="center">
+  <tr>
+   <td bgcolor="#c0c0c0"><h1>Download</h1></td>
+  </tr>
+  <tr>
+   <td>
+    <p>
+     You can download the latest release of OpenLoad from SourceForge
+     <a href="http://sourceforge.net/project/showfiles.php?group_id=21343"><b>HERE</b></a>.  
+    </p>
+   </td>
+  </tr> 
+ </table>
 
+ <br>
  <a name="install"></a>
- <h1>Installation</h1>
- <h2>Linux</h2>
- <p>
-  For i386 systems you can use the binary rpm file. Download the file and install
-  using:
- </p>
- <pre>
-  rpm -i &lt;filename&gt;</pre>
- <p>
-  This installs openload in /usr/local/bin.
- </p>
- <p>
-  For other systems download the .tar.gz file, unpack it using:
- </p>
- <pre>
-  tar xvzf &lt;filename&gt;</pre>
- <p>
-  and compile using the normal procedure:
- </p>
- <pre>
-  ./configure
-  make
-  make install</pre>
- <p>
-  see the INSTALL file for details.
- </p>
- <h2>Win32</h2>
- <p>
-  Download the executable (openload.exe) and save it in a directory which
-  is in your path. You can now start OpenLoad from any command (DOS) window.
- </p>
+ <table border="1" width="70%" cellspacing="0" align="center">
+  <tr>
+   <td bgcolor="#c0c0c0"><h1>Installation</h1></td>
+  </tr>
+  <tr>
+   <td>
+    <h2>Linux</h2>
+    <p>
+     For i386 systems you can use the binary rpm file. Download the file and install
+     using:
+    </p>
+    <pre>
+     rpm -i &lt;filename&gt;</pre>
+    <p>
+     This installs openload in /usr/local/bin.
+    </p>
+    <p>
+     For other systems download the .tar.gz file, unpack it using:
+    </p>
+    <pre>
+     tar xvzf &lt;filename&gt;</pre>
+    <p>
+     and compile using the normal procedure:
+    </p>
+    <pre>
+     ./configure
+     make
+     make install</pre>
+    <p>
+     see the INSTALL file for details.
+    </p>
+    <h2>Win32</h2>
+    <p>
+     Download the executable (openload.exe) and save it in a directory which
+     is in your path. You can now start OpenLoad from any command (DOS) window.
+    </p>
+   </td>
+  </tr>
+ </table>
 
+ <br>
  <a name="how"></a>
- <h1>How do I use it?</h1>
- <p>
-  OpenLoad is (currently) a commandline tool, that you execute from a prompt
-  like this:
- </p>
- <pre>
-  openload [options] http://testapp.site.com 10</pre>
- <p>
-  The 2 parameters are:
- </p>
- <ul>
-  <li>The url of the web page you want to test.</li>
-  <li>Number of simultanous clients to simulate. This is optional and
-   defaults to 5.</li>
-  <li>A number of options is also available. See <a href="cmd_parms.html">here</a>
-   for a detailed description of all the options.</li>
- </ul>
- <p>
-  You will then get output similar to this:
- </p>
- <pre>
+ <table border="1" width="70%" cellspacing="0" align="center">
+  <tr>
+   <td bgcolor="#c0c0c0"><h1>How do I use it?</h1></td>
+  </tr>
+  <tr>
+   <td>
+    <p>
+     OpenLoad is (currently) a commandline tool, that you execute from a prompt
+     like this:
+    </p>
+    <pre>
+     openload [options] http://testapp.site.com 10</pre>
+    <p>
+     The 2 parameters are:
+    </p>
+    <ul>
+     <li>The url of the web page you want to test.</li>
+     <li>Number of simultanous clients to simulate. This is optional and
+      defaults to 5.</li>
+     <li>A number of options is also available. See <a href="cmd_parms.html">here</a>
+      for a detailed description of all the options.</li>
+    </ul>
+    <p>
+     You will then get output similar to this:
+    </p>
+    <pre>
   $ openload localhost 10
   URL: http://localhost:80/
   Clients: 10
@@ -107,38 +157,43 @@
   MaTps 382.04, Tps 727.00, Resp Time  0.020, Err   0%, Count  1838
   MaTps 398.54, Tps 547.00, Resp Time  0.018, Err   0%, Count  2385
   MaTps 425.78, Tps 670.90, Resp Time  0.014, Err   0%, Count  3072
- 
+
   Total TPS: 452.90
   Avg. Response time:  0.021 sec.
   Max Response time:   0.769 sec</pre>
- <p>
- Where:
- </p>
- <ul>
-  <li><b>MaTps:</b> a 20 second moving average of <b>TPS</b>.</li>
-  <li><b>Tps:</b> (Transactions Per Second) is the number of completed 
-   requests during that second.</li>
-  <li><b>Resp Time:</b> the average response time in seconds for the elapsed
-   second.</li>
-  <li><b>Err:</b> the percentage of responses that was erronous, i.e. didn't
-   return a HTTP 200 Ok staus.</li>
-  <li><b>Count:</b> the total number of completed requests.</li>
-  <li><b>Total TPS</b> is the average TPS for the whole run, i.e.
-   (Total completed requests) / (Total elapsed time).</li>
-  <li><b>Avg. Response time:</b> the overall average response time
-   in seconds.</li>
-  <li><b>Max Response time:</b> the highest response time during this run.</li>
- </ul>
- <p>
-  <b>Note:</b> you stop the run by pressing Enter.
- </p>
- <hr />
+    <p>
+     Where:
+    </p>
+    <ul>
+     <li><b>MaTps:</b> a 20 second moving average of <b>TPS</b>.</li>
+     <li><b>Tps:</b> (Transactions Per Second) is the number of completed 
+      requests during that second.</li>
+     <li><b>Resp Time:</b> the average response time in seconds for the elapsed
+      second.</li>
+     <li><b>Err:</b> the percentage of responses that was erronous, i.e. didn't
+      return a HTTP 200 Ok staus.</li>
+     <li><b>Count:</b> the total number of completed requests.</li>
+     <li><b>Total TPS</b> is the average TPS for the whole run, i.e.
+      (Total completed requests) / (Total elapsed time).</li>
+     <li><b>Avg. Response time:</b> the overall average response time
+      in seconds.</li>
+     <li><b>Max Response time:</b> the highest response time during this run.</li>
+    </ul>
+    <p>
+     <b>Note:</b> you stop the run by pressing Enter.
+    </p>
+   </td>
+  </tr>
+ </table>
+
+ <br>
+ <hr>
  <p align="center" class="footer">
-  OpenLoad is hosted on:<br />
-  <br />
+  OpenLoad is hosted on:<br>
+  <br>
   <a href="http://sourceforge.net">
    <img src="http://sourceforge.net/sflogo.php?group_id=1"
-   width="88" height="31" border="0" alt="SourceForge Logo" /></a>
+   width="88" height="31" border="0" alt="SourceForge Logo"></a>
  </p>
 </body>
 </html>
