@@ -8,14 +8,14 @@
 
 #define CRLF "\x00d\x00a"
 
-typedef enum
+enum EHttpMethod
 {
     METHOD_GET = 0,
     METHOD_POST = 1,
     METHOD_HEAD = 2,
     METHOD_PUT = 3,
     METHOD_DELETE = 4
-} eHttpMethod;
+};
 
 class CHttpRequest
 {
@@ -23,7 +23,7 @@ public:
     CHttpRequest();
     virtual ~CHttpRequest();
 
-    eHttpMethod m_Method;
+    EHttpMethod m_Method;
     CUrl m_Url;
     CHttpHeaderList m_Headers;
     char* m_Body;
