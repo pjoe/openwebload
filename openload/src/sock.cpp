@@ -179,7 +179,7 @@ int CTcpSock::create(void)
     m_sock = ::socket(AF_INET, SOCK_STREAM, 0);
     if(m_sock != INVALID_SOCKET)
     {
-	setNonBlocking(m_sock);
+        setNonBlocking(m_sock);
         // TODO: check for failure to set nonblocking socket
         m_state = created;
         tracef("OK, fd=0x%08x\n", m_sock);
@@ -430,6 +430,7 @@ int CTcpSock::processEvent(int event)
     switch(m_state)
     {
     case connecting:
+        /*
         if(event & except)
         {
             tracef("connect FAILED\n");
@@ -437,6 +438,7 @@ int CTcpSock::processEvent(int event)
             m_intStatus = connectFail;
             break;
         }
+        */
         if(event & write)
         {
             int res;

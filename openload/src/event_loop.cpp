@@ -1,5 +1,6 @@
 #include "event_loop.h"
 #include <stdio.h>
+#include <string.h>
 
 #ifdef WIN32
 

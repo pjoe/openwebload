@@ -158,6 +158,8 @@ void ConnectFail(CTcpSock* pSock)
 {
     CHttpContext* pContext = (CHttpContext*) pSock->m_context;
 
+	printf("Connect fail\n");
+
     pContext->m_pResp->m_Status = -1;
     Done(pSock);
 }
@@ -365,7 +367,7 @@ void GotChunkLen(CTcpSock* pSock)
     pSock->m_cbRecvBufOk = GotChunk;
 
 	// got an empty line -> try again
-	if(pSock->m_read == 0)
+	if(pSock->m_read == 0 && !pSock->m_eof)
 	{
 		pSock->readLine(pSock->m_rbuf, MAX_LINE_SIZE);
 	}
