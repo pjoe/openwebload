@@ -29,29 +29,32 @@
   <a href="#files">Files</a><br />
  </p>
 
- <a name="changehist" />
+ <a name="changehist"></a>
  <h2>Change History</h2>
  <pre>
   $Log$
+  Revision 1.2  2001/03/01 23:37:21  pjohnsen
+  Added Developer Info
+
   Revision 1.1  2001/03/01 22:40:10  pjohnsen
   Initial version
 
  </pre>
 
- <a name="scope" />
+ <a name="scope"></a>
  <h2>Scope</h2>
  <p>
   This is a description of the top level components of the OpenLoad project.
   This should give a good overview of the different parts.
  </p>
 
- <a name="diagram" />
+ <a name="diagram"></a>
  <h2>Diagram</h2>
  <p>
   <img src="components.png" />
  </p>
 
- <a name="socket" />
+ <a name="socket"></a>
  <h2>[1] Socket</h2>
  <p>
   The socket component handles the interface to the socket layer (WinSock
@@ -72,7 +75,7 @@
   Each of this operations provide a callback at completion.
  </p>
 
- <a name="eventloop" />
+ <a name="eventloop"></a>
  <h2>[2] Event Loop</h2>
  <p>
   The event loop listens for incoming events from the registered sockets.
@@ -97,7 +100,7 @@
   <li>Running the event loop</li>
  </ul>
 
- <a name="httpclient" />
+ <a name="httpclient"></a>
  <h2>[3] HTTP Client</h2>
  <p>
   The HTTP client implements the HTTP protocol on top of the socket component,
@@ -118,7 +121,7 @@
    the response, status, etc.</li>
  </ul>
 
- <a name="testexec" />
+ <a name="testexec"></a>
  <h2>[4] Test Execution</h2>
  <p>
   This is the main program that actually executes the test. It works by
@@ -128,7 +131,7 @@
   notes the response time, etc.) and each second output is generated.
  </p>
 
- <a name="files" />
+ <a name="files"></a>
  <h2>Files</h2>
  <h3>[1] Socket</h3>
  <pre>
