@@ -64,11 +64,13 @@ long g_totalCount = 0;
 long g_lastReportTime;
 long g_count = 0;
 long g_errorCount = 0;
+long g_totalErrorCount = 0;
 long g_duration = 0;
 long g_totalDuration = 0;
 long g_maxDuration = 0;
 float g_maTps = 0.0f;
 
+int g_fBodyOnly = 0; // only output body in test mode
 int g_fVerify = 0;
 CVerifier g_verifier;
 char g_originalPath[1025];
@@ -82,13 +84,19 @@ void ResponseFunc(CHttpContext* pContext)
     if(pReqParams->mode == RM_TEST)
     {
         // Show response
-        printf("------------------------\n");
-        printf("Status: %d\n", pContext->m_pResp->m_Status);
-        printf("---- Headers -----------\n");
-        pContext->m_pResp->m_Headers.Dump();
-        printf("---- Body %5d bytes --\n", pContext->m_pResp->m_Len);
+        if(!g_fBodyOnly)
+        {
+            printf("------------------------\n");
+            printf("Status: %d\n", pContext->m_pResp->m_Status);
+            printf("---- Headers -----------\n");
+            pContext->m_pResp->m_Headers.Dump();
+            printf("---- Body %5d bytes --\n", pContext->m_pResp->m_Len);
+        }
         fwrite(pContext->m_pResp->m_Body, 1, pContext->m_pResp->m_Len, stdout);
-        printf("---- End ---------------\n");
+        if(!g_fBodyOnly)
+        {
+            printf("---- End ---------------\n");
+        }
         return;
     }
 
@@ -129,6 +137,7 @@ void ResponseFunc(CHttpContext* pContext)
     {
         g_totalCount += g_count;
         g_totalDuration += g_duration;
+        g_totalErrorCount += g_errorCount;
         float tps = g_count / ((endTime - g_lastReportTime) / 1000.0f);
         float respTime = g_duration / 1000.0f / g_count;
 
@@ -232,6 +241,10 @@ int main(int argc, char* argv[])
                         }
                     }
                     break;
+                case 'b':
+                    // body only
+                    g_fBodyOnly = 1;
+                    break;
                 default:
                     // unknown option
                     printf("Error: unknown option %s\n", arg);
@@ -323,7 +336,7 @@ int main(int argc, char* argv[])
             printf("Avg. Response time: %6.3f sec.\n", respTime);
             printf("Max Response time:  %6.3f sec\n", g_maxDuration / 1000.0f);
             printf("Total Requests: %7ld\n", g_totalCount);
-            printf("Total Errors:   %7ld\n", g_errorCount);
+            printf("Total Errors:   %7ld\n", g_totalErrorCount);
         }
         if(oMode == OM_CSV)
         {

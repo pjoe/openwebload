@@ -1,4 +1,4 @@
-25-jun-2001 v. 0.1.2
+26-jun-2001 v. 0.1.2
 
 -Bugfix: error in stri[n]cmp on linux
 -Added -t option for test runs showing response on stdout
@@ -8,6 +8,7 @@
 -Cleaned up parameter parsing
 -Graceful handling of DNS lookup failure
 -Added first version of verifier code
+-Added -b option to only output the body in test mode
 
 27-mar-2001 v. 0.1.1
 
