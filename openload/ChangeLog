@@ -1,3 +1,10 @@
-27-mar-2001 v. 0.1.0
+27-mar-2001 v. 0.1.1
+
+-Added handling of non-chunked responses with no Content-Length header
+-Added handling of port numbers in urls
+-Added response times to output
+-Added error percentage to output
+
+27-feb-2001 v. 0.1.0
 
 Initial Version
