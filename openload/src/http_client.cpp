@@ -11,11 +11,13 @@ int stricmp(const char* s1, const char* s2)
     int res = 0;
     while(1)
     {
-	res = tolower(*s1) - tolower(*s2);
-	if(*s1 == 0 || *s2 == 0)
-	    break;
-	s1++;
-	s2++;
+        res = tolower(*s1) - tolower(*s2);
+        if(res != 0)
+            break;
+        if(*s1 == 0 || *s2 == 0)
+            break;
+        s1++;
+        s2++;
     }
     return res;
 }
@@ -25,12 +27,14 @@ int strnicmp(const char* s1, const char* s2, int n)
     int res = 0;
     while(n)
     {
-	n--;
-	res = tolower(*s1) - tolower(*s2);
-	if(*s1 == 0 || *s2 == 0)
-	    break;
-	s1++;
-	s2++;
+        n--;
+        res = tolower(*s1) - tolower(*s2);
+        if(res != 0)
+            break;
+        if(*s1 == 0 || *s2 == 0)
+            break;
+        s1++;
+        s2++;
     }
     return res;
 }
@@ -228,7 +232,7 @@ void ParseStatus(CTcpSock* pSock)
     }
     else
     {
-		p = buf;
+        p = buf;
         while(!isspace(*p) && *p)
             p++;
         while(isspace(*p) && *p)
@@ -289,7 +293,7 @@ void ReadHeader(CTcpSock* pSock)
             {
                 // handle when content-length header is not set
                 pContext->m_pResp->m_Body = new char[BUFFER_SIZE];
-		pContext->m_pResp->m_Len = 0;
+                pContext->m_pResp->m_Len = 0;
                 pSock->m_cbRecvBufOk = NonChunkedNoCtLenDone;
                 pSock->recvBuf(pContext->m_pResp->m_Body, BUFFER_SIZE);
             }
@@ -326,19 +330,19 @@ void NonChunkedNoCtLenDone(CTcpSock* pSock)
     // check if we are done
     if(pSock->m_read < BUFFER_SIZE)
     {
-	Done(pSock);
+        Done(pSock);
     }
     else
     {
-	// extend buffer
-	char* pData;
-	pData = new char[pContext->m_pResp->m_Len + BUFFER_SIZE];
-	memcpy(pData, pContext->m_pResp->m_Body, pContext->m_pResp->m_Len);
-	delete [] pContext->m_pResp->m_Body;
-	pContext->m_pResp->m_Body = pData;
+        // extend buffer
+        char* pData;
+        pData = new char[pContext->m_pResp->m_Len + BUFFER_SIZE];
+        memcpy(pData, pContext->m_pResp->m_Body, pContext->m_pResp->m_Len);
+        delete [] pContext->m_pResp->m_Body;
+        pContext->m_pResp->m_Body = pData;
 
-	pSock->m_cbRecvBufOk = NonChunkedNoCtLenDone;
-	pSock->recvBuf(&pData[pContext->m_pResp->m_Len], BUFFER_SIZE);
+        pSock->m_cbRecvBufOk = NonChunkedNoCtLenDone;
+        pSock->recvBuf(&pData[pContext->m_pResp->m_Len], BUFFER_SIZE);
     }
 }
 

@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
     printf("starting\n");
     char* szAddr = "192.168.0.11";
     if(argc > 1)
-	szAddr = argv[1];
+        szAddr = argv[1];
     get_address(szAddr, 80, &addr);
     printf("the address is: %s\n", inet_ntoa(addr.sin_addr));
 
