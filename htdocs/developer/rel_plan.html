@@ -19,15 +19,19 @@
 
  <h2>Table Of Contents</h2>
  <p>
-  <a href="#changehist">Change History</a><br />
-  <a href="#scope">Scope</a><br />
-  <a href="#releases">Releases</a><br />
+  <a href="#changehist">Change History</a><br>
+  <a href="#scope">Scope</a><br>
+  <a href="#news">News</a><br>
+  <a href="#releases">Releases</a><br>
  </p>
 
  <a name="changehist"></a>
  <h2>Change History</h2>
  <pre>
   $Log$
+  Revision 1.2  2001/06/12 11:49:00  pjohnsen
+  use ../main.css
+
   Revision 1.1  2001/06/05 13:12:55  pjohnsen
   Initial Version
 
@@ -41,19 +45,63 @@
   release, NOT when.
  </p>
 
+ <a name="news"></a>
+ <h2>News</h2>
+ <p>
+  After the release of a free non-commercial Qt license for win32, it is now
+  possible to write a single GUI for Linux and win32. As a consequence the need
+  to move the core functionality into a seperate library is no longer that urgent,
+  and has been pushed back to 0.3.0. The 0.2.0 release is now focused on providing
+  a first version of a GUI.
+ </p>
+ <p>
+  In 0.1.2 only one bug was fixed (no more had been found). As a result of this
+  the 0.1.3 bugfix release has been cancelled. Potential bugfixes will be done in
+  the 0.2.x releases.
+ </p>
+
  <a name="releases"></a>
  <h2>Releases</h2>
  <p>
   These are the planned releases:
-  <ul>
-   <li><b>0.1.2</b> Better error handling (unable to find host, unable
-    to connect to webserver)</li>
-   <li><b>0.1.3</b> Bug fixes, config file / command line options for
-    specifying request headers</li>
-   <li><b>0.2.0</b> Move core measurement functions into a shared library,
-    allowing several UI's to be build on top (Commandline, KDE, MFC, ...)</li>
-   <li><b>0.2.x</b> Added features: POST data, SSL?, ...</li>
-  </ul>
+  <table border="1" cellspacing="0">
+   <tr>
+    <th>Status</th>
+    <th>Release</th>
+    <th>Notes</th>
+   </tr>
+   <tr>
+    <td bgcolor="#80ff80">Completed</td>
+    <td><b>0.1.2</b></td>
+    <td>Better error handling (unable to find host, unable to connect to webserver),
+     command line options for specifying request headers.</td>
+   </tr>
+   <tr>
+    <td bgcolor="#ffff80">Ongoing</td>
+    <td><b>0.2.0</b></td>
+    <td>Create a GUI using Qt (Linux AND win32).</td>
+   </tr>
+   <tr>
+    <td bgcolor="#ff8080">Not started</td>
+    <td><b>0.2.1</b></td>
+    <td>Added features: POST data, Cookies</td>
+   </tr>
+   <tr>
+    <td bgcolor="#ff8080">Not started</td>
+    <td><b>0.2.2</b></td>
+    <td>Added features: Scripting for running multiple tests</td>
+   </tr>
+   <tr>
+    <td bgcolor="#ff8080">Not started</td>
+    <td><b>0.2.3</b></td>
+    <td>Added features: SSL support?</td>
+   </tr>
+   <tr>
+    <td bgcolor="#ff8080">Not started</td>
+    <td><b>0.3.0</b></td>
+    <td>Move core measurement functions into a shared library.</td>
+   </tr>
+  </table>
  </p>
 
 </body>
