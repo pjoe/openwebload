@@ -1,4 +1,4 @@
-xx-jun-2001 v. 0.1.2
+25-jun-2001 v. 0.1.2
 
 -Bugfix: error in stri[n]cmp on linux
 -Added -t option for test runs showing response on stdout
