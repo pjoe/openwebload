@@ -144,6 +144,11 @@ int main(int argc, char* argv[])
                     clients = 1;
                     mode = TEST;
                     break;
+                case 'h':
+                    i++;
+                    req.m_Headers.Add(argv[i], argv[i+1]);
+                    i++;
+                    break;
                 default:
                     // unknown option
                     printf("Error: unknown option %s\n", arg);
