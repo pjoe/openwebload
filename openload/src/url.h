@@ -15,6 +15,8 @@ public:
     virtual ~CUrl();
     int parse(const char* url);
     CUrl& operator=(const CUrl& r);
+    /** Changes the path part of the url */
+    void setPath(const char* newpath);
 };
 
 #ifndef WIN32

@@ -80,3 +80,10 @@ CUrl& CUrl::operator=(const CUrl& r)
     return *this;
 }
 
+/** Changes the path part of the url */
+void CUrl::setPath(const char* newpath)
+{
+    delete [] path;
+    path = new char[strlen(newpath) + 1];
+    strcpy(path, newpath);
+}
