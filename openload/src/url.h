@@ -17,7 +17,12 @@ public:
     CUrl& operator=(const CUrl& r);
 };
 
+#ifndef WIN32
 
+extern int stricmp(const char* s1, const char* s2);
+extern int strnicmp(const char* s1, const char* s2, int n);
+
+#endif // WIN32
 
 #endif // URL_H
 
