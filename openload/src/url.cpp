@@ -1,5 +1,5 @@
 #include "url.h"
-
+#include <string.h>
 
 #ifndef WIN32
 
