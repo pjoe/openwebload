@@ -89,6 +89,9 @@ void ResponseFunc(CHttpContext* pContext)
 	g_duration = 0;
     }
 
+    // Show body
+    //fwrite(pContext->m_pResp->m_Body, 1, pContext->m_pResp->m_Len, stdout); 
+
     // Send new request
     pReqParams->startTime = getMsTime();
     SendRequest(pContext->m_pReq, pContext->m_pEvLoop, ResponseFunc, pReqParams);

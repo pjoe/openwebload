@@ -212,6 +212,7 @@ int CTcpSock::connect(SOCKADDR_IN* name)
 int CTcpSock::send(const char* buf, int len)
 {
     tracef("sending %d bytes\n", len);
+    tracef(" %s\n", buf);
     int res = 0;
     if(m_state == ready)
     {
@@ -219,6 +220,11 @@ int CTcpSock::send(const char* buf, int len)
         m_sent = res;
         m_wlen = len;
         m_wbuf = buf;
+	if(res < 0)
+	{
+	    tracef("send error: %d\n", getSocketError());
+	    m_sent = 0;
+	}
         if(res < len)
         {
             m_state = sending;
@@ -268,6 +274,7 @@ void CTcpSock::recvBufLoop(void)
 
 int CTcpSock::recvBuf(char* buf, int len)
 {
+    tracef("Receiving buffer ...\n");
     int res = 0;
     if(m_state == ready)
     {
