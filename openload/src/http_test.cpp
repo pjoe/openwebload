@@ -39,42 +39,56 @@ long g_startTime;
 long g_totalCount = 0;
 long g_lastReportTime;
 long g_count = 0;
+long g_errorCount = 0;
+long g_duration = 0;
+long g_totalDuration = 0;
+long g_maxDuration = 0;
 float g_maTps = 0.0f;
 
 void ResponseFunc(CHttpContext* pContext)
 {
-    static int i=0;
-    i++;
-
+    // get response time (duration) of this request
     TReqParams* pReqParams = (TReqParams*) pContext->m_pParam;
     long endTime = getMsTime();
     long duration = endTime - pReqParams->startTime;
-    g_count++;
 
+    // Check if we got a HTTP 200 OK response 
+    if(pContext->m_pResp->status != 200)
+    {
+	g_errorCount++;
+    }
+
+    // Update counters
+    g_count++;
+    g_duration += duration;
+    if(duration > g_maxDuration)
+    {
+	g_maxDuration = duration;
+    }
+
+    // if it's more than a second since last report, do a new one
     if(endTime - g_lastReportTime >= 1000)
     {
         g_totalCount += g_count;
+	g_totalDuration += g_duration;
         float tps = g_count / ((endTime - g_lastReportTime) / 1000.0f);
+	float respTime = g_duration / 1000.0f / g_count;
         if(g_maTps < 0.001f)
             g_maTps = tps;
         else
             g_maTps += (tps - g_maTps) * 0.1f;
     
-        printf("MATPS %6.2f, TPS %6.2f, count %8ld\n", g_maTps, tps, g_totalCount);
+        printf("MATPS %6.2f, TPS %6.2f, RESP TIME %6.3f, count %5ld\n",
+	       g_maTps, tps, respTime, g_totalCount);
 
         g_lastReportTime = endTime;
         g_count = 0;
+	g_duration = 0;
     }
 
-
-    //printf("Status: %d, time %7.3f sec\n", pContext->m_pResp->m_Status, duration / 1000.0f);
-    //pContext->m_pResp->m_Headers.Dump();
-    //fwrite(pContext->m_pResp->m_Body, 1, pContext->m_pResp->m_Len, stdout);
-    //if(i<8)
-    {
-        pReqParams->startTime = getMsTime();
-        SendRequest(pContext->m_pReq, pContext->m_pEvLoop, ResponseFunc, pReqParams);
-    }
+    // Send new request
+    pReqParams->startTime = getMsTime();
+    SendRequest(pContext->m_pReq, pContext->m_pEvLoop, ResponseFunc, pReqParams);
 }
 
 int main(int argc, char* argv[])
@@ -113,7 +127,10 @@ int main(int argc, char* argv[])
     long now = getMsTime();
 
     float tps = g_totalCount /((now - g_startTime) / 1000.0f);
+    float respTime = g_totalDuration / 1000.0f / g_totalCount;
     printf("Total TPS: %6.2f\n", tps);
+    printf("Avg. Response time: %6.3f sec.\n", respTime);
+    printf("Max Response time:  %6.3f sec\n", g_maxDuration / 1000.0f);
 
 
     delete [] pReqParams;
