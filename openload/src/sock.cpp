@@ -2,11 +2,26 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+extern long getMsTime(void);
+
 void tracef(const char* str, ...)
 {
+    return;
+    static long startTime = -1;
+    static long lastTime = -1;
+
     va_list args;
     va_start(args, str);
-    //vprintf(str, args);
+    long now = getMsTime();
+    if(startTime < 0)
+        startTime = now;
+    if(lastTime < 0)
+        lastTime = now;
+    //printf("%04ld: ", now - startTime);
+    printf("%03ld: ", now - lastTime);
+
+    lastTime = now;
+    vprintf(str, args);
     va_end(args);
 };
 
@@ -145,6 +160,7 @@ CTcpSock::CTcpSock(void)
     m_state = start;
     m_context = NULL;
     m_cbConnectOk = NULL;
+    m_cbConnectFail = NULL;
     m_cbSendOk = NULL;
     m_cbReadLineOk = NULL;
     m_cbRecvBufOk = NULL;
@@ -318,6 +334,7 @@ void CTcpSock::readLineLoop(void)
             m_rbuf[m_read] = 0;
             m_state = ready;
             m_intStatus = readLineOk;
+            tracef("read line:\n %s\n", m_rbuf);
             break;
         }
     }
@@ -381,6 +398,10 @@ int CTcpSock::checkFdSets(fd_set* rfds, fd_set* wfds, fd_set* efds)
             if(m_cbConnectOk)
                 (*m_cbConnectOk)(this);
             break;
+        case connectFail:
+            if(m_cbConnectFail)
+                (*m_cbConnectFail)(this);
+            break;
         case sendOk:
             if(m_cbSendOk)
                 (*m_cbSendOk)(this);
@@ -413,26 +434,26 @@ int CTcpSock::processEvent(int event)
         {
             tracef("connect FAILED\n");
             m_state = created;
-            // TODO: make callback
+            m_intStatus = connectFail;
             break;
         }
         if(event & write)
         {
-	    int res;
-	    int len = sizeof(res);
-	    getsockopt(m_sock, SOL_SOCKET, SO_ERROR, (char *) &res, (socklen_t*) &len);
-	    if(res == 0)
-	    {
-		tracef("connect OK\n");
-		m_state = ready;
-		m_intStatus = connectOk;
-	    }
-	    else
-	    {
-		tracef("connect FAILED\n");
-		m_state = created;
-		// TODO: make callback
-	    }
+            int res;
+            int len = sizeof(res);
+            getsockopt(m_sock, SOL_SOCKET, SO_ERROR, (char *) &res, (socklen_t*) &len);
+            if(res == 0)
+            {
+                tracef("connect OK\n");
+                m_state = ready;
+                m_intStatus = connectOk;
+            }
+            else
+            {
+                tracef("connect FAILED\n");
+                m_state = created;
+                m_intStatus = connectFail;
+            }
         }
         break;
     case sending:

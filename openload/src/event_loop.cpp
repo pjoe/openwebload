@@ -5,12 +5,19 @@
 
 #include <conio.h>
 
+bool dbgBreak = false;
+
 int checkStdIn(void)
 {
     if(kbhit())
         {
             char c;
             c = getch();
+            if (c == 'b')
+            {
+                dbgBreak = true;
+                return 0;
+            }
 		    return 1;
         }
     return 0;
@@ -92,18 +99,24 @@ int CEventLoop::run(void)
         {
             pSock->m_sock->setFdSets(&rfds, &wfds, &efds);
             if(pSock->m_sock->m_sock > i)
-		i = pSock->m_sock->m_sock;
+                i = pSock->m_sock->m_sock;
             pSock = pSock->m_pNext;
         }
 
         if(i == 0)
             break;
 
-	tv.tv_sec = 0;
-	tv.tv_usec = 200000L;
-	//printf("calling select, n=%d ... ", i+1);
+        tv.tv_sec = 0;
+        tv.tv_usec = 200000L;
+        //printf("calling select, n=%d ... ", i+1);
         res = select(i + 1, &rfds, &wfds, &efds, &tv);
-	//printf("returns %d\n", res);
+        //printf("returns %d\n", res);
+
+        if(dbgBreak)
+        {
+            int j = 45;
+            j += i;
+        }
 
         pSock = m_sockList;
         while(pSock)

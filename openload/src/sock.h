@@ -195,6 +195,12 @@ public:
     TCallBack* m_cbConnectOk;
 
     /**
+     * Callback for when the socket fails connecting to the
+     * remote peer.
+     */
+    TCallBack* m_cbConnectFail;
+
+    /**
      * Callback for when a send or sendString has completed.
      */
     TCallBack* m_cbSendOk;
@@ -282,6 +288,7 @@ protected:
     {
         noEvent,
         connectOk,
+        connectFail,
         sendOk,
         readLineOk,
         recvBufOk,

@@ -63,6 +63,7 @@ CHttpResponse::CHttpResponse()
 {
     m_Status = 0;
     m_Body = NULL;
+    m_Len = 0;
 }
 
 CHttpResponse::~CHttpResponse()
@@ -74,6 +75,7 @@ CHttpResponse::~CHttpResponse()
 // ================================================
 
 void SendCommand(CTcpSock* pSock);
+void ConnectFail(CTcpSock* pSock);
 void SendHeader(CTcpSock* pSock);
 void SendBody(CTcpSock* pSock);
 void ReadStatus(CTcpSock* pSock);
@@ -108,6 +110,7 @@ int SendRequest(CHttpRequest* pReq, CEventLoop* pEvLoop, TResponseFunc* pCallBac
 
     // get ready to send command
     pSock->m_cbConnectOk = SendCommand;
+    pSock->m_cbConnectFail = ConnectFail;
 
     // start connecting
     res = pSock->connect(&pReq->m_Url.addr);
@@ -149,6 +152,14 @@ void SendCommand(CTcpSock* pSock)
 
     // send the command
     pSock->sendString(command);
+}
+
+void ConnectFail(CTcpSock* pSock)
+{
+    CHttpContext* pContext = (CHttpContext*) pSock->m_context;
+
+    pContext->m_pResp->m_Status = -1;
+    Done(pSock);
 }
 
 void SendHeader(CTcpSock* pSock)
