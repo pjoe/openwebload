@@ -5,19 +5,12 @@
 
 #include <conio.h>
 
-bool dbgBreak = false;
-
 int checkStdIn(void)
 {
     if(kbhit())
         {
             char c;
             c = getch();
-            if (c == 'b')
-            {
-                dbgBreak = true;
-                return 0;
-            }
 		    return 1;
         }
     return 0;
@@ -111,12 +104,6 @@ int CEventLoop::run(void)
         //printf("calling select, n=%d ... ", i+1);
         res = select(i + 1, &rfds, &wfds, &efds, &tv);
         //printf("returns %d\n", res);
-
-        if(dbgBreak)
-        {
-            int j = 45;
-            j += i;
-        }
 
         pSock = m_sockList;
         while(pSock)
