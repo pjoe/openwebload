@@ -39,30 +39,33 @@ The 2 parameters are:
 
 You will then get output similar to this:
 
- >openload http://192.168.0.11/perl/test.pl 10
- URL: http://192.168.0.11/perl/test.pl
+ $ openload localhost 10
+ URL: http://localhost:80/
  Clients: 10
- MATPS 126.62, TPS 126.62, count      127
- MATPS 132.84, TPS 188.81, count      316
- MATPS 139.52, TPS 199.60, count      516
- MATPS 146.65, TPS 210.89, count      729
- MATPS 150.37, TPS 183.82, count      913
- MATPS 158.46, TPS 231.31, count     1145
- MATPS 163.62, TPS 210.00, count     1355
- MATPS 173.00, TPS 257.49, count     1613
- MATPS 179.78, TPS 240.76, count     1854
- MATPS 184.95, TPS 231.54, count     2086
- MATPS 189.06, TPS 226.00, count     2312
- MATPS 189.75, TPS 196.00, count     2508
- Total TPS: 203.80
+ MaTps 355.11, Tps 355.11, Resp Time  0.015, Err   0%, Count   511
+ MaTps 339.50, Tps 199.00, Resp Time  0.051, Err   0%, Count   711
+ MaTps 343.72, Tps 381.68, Resp Time  0.032, Err   0%, Count  1111
+ MaTps 382.04, Tps 727.00, Resp Time  0.020, Err   0%, Count  1838
+ MaTps 398.54, Tps 547.00, Resp Time  0.018, Err   0%, Count  2385
+ MaTps 425.78, Tps 670.90, Resp Time  0.014, Err   0%, Count  3072
+ 
+ Total TPS: 452.90
+ Avg. Response time:  0.021 sec.
+ Max Response time:   0.769 sec
 
 Where:
 
- * MATPS is a 20 second moving average of TPS.
- * TPS (Transactions Per Second) is the number of completed requests
+ * MaTps: a 20 second moving average of Tps.
+ * Tps: (Transactions Per Second) is the number of completed requests
    during that second.
- * Count is the total number of completed requests.
- * Total TPS is the average TPS for the whole run, i.e. (Total completed
+ * Resp Time: the average response time in seconds for the elapsed
+   second.
+ * Err: the percentage of responses that was erronous, i.e. didn't
+   return a HTTP 200 Ok staus.
+ * Count: the total number of completed requests.
+ * Total TPS: the average TPS for the whole run, i.e. (Total completed
    requests) / (Total elapsed time).
+ * Avg. Response time: the overall average response time in seconds.
+ * Max Response time: the highest response time during this run.
 
 Note: you stop the run by pressing Enter.
